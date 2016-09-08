@@ -49,7 +49,7 @@ public class SectionProperties extends Properties {
 	        int start = pos;
 	        
 	        //deal with [section]
-	        boolean isSection = line.indexOf('[',pos) != -1 && line.indexOf(']',pos) != -1;
+	        boolean isSection = line.indexOf(']',pos) != -1;
 	        
 	        //deal with \ line feed
 	        boolean needsEscape = line.indexOf('\\', pos) != -1;
@@ -112,6 +112,7 @@ public class SectionProperties extends Properties {
 	        if(isSection){
 	        	currSection = keyString;
 	        	keyString = "";
+	        	continue;
 	        }
 	 
 	        while (pos < line.length() && isIgnoreChar(c = line.charAt(pos)))
@@ -198,8 +199,8 @@ public class SectionProperties extends Properties {
 	        if(currSection == null){
 	        	put(keyString, element.toString());
 	        }
-	        else{
-	        	put(currSection+keydelimit+keyString, line.substring(pos));
+	        else {
+	        	put(currSection+keydelimit+keyString, element.toString());
 	        }
 	      }
 

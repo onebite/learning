@@ -10,18 +10,22 @@ import org.nutz.lang.Lang;
 import java.util.Map;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Properties;
 
 public class test {
 	public static void main(String[] args){
-		 SectionProperties sprop = new SectionProperties();
+		SectionProperties sprop = new SectionProperties();
+		 //Properties sprop = new Properties();
 		 try{
 			 sprop.load(new FileInputStream("C:\\workspace\\source\\demo\\test.properties"));
 		 }catch(IOException e){
 			 e.printStackTrace();
 		 }
 		 
+		 //toFolder = C:\Users\X230\Desktop\0725\to sfs
+		 
 		 for(Object key:sprop.keySet()){
-			 System.out.println(key.toString());
+			 System.out.println(key.toString() + " = " + sprop.getProperty(key.toString()));
 		 }
 		 
 		 String s = Json.toJson("{eventCode:'17',eventName:'Session_Resume',SESSION_RESUME:'SGW'}");
