@@ -80,5 +80,6 @@
 	<classpathentry kind="lib" path="C:/workspace/source/hadooplib/snappy-java-1.0.4.1.jar"/>
 	<classpathentry kind="lib" path="C:/workspace/source/hadooplib/zkclient-0.5-dev.jar"/>
 	<classpathentry kind="lib" path="C:/workspace/source/hadooplib/zookeeper-3.4.5-transwarp.jar"/>
+	<classpathentry kind="lib" path="C:/workspace/backup/jars/AlibabaFastJson.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
