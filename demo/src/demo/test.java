@@ -1,6 +1,10 @@
 package demo;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+
+import com.google.gson.Gson;
+
 import java.util.regex.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,53 +35,39 @@ public class test {
 	public static void main(String[] args){
 		int i = 0;
 		int j = 1;
-		System.out.println("\\.".length());
-		long start1 = System.currentTimeMillis();
-		int count = 10000000;
-		while(count > 0){
-			"RX_RAR_RAA_TRANSACTION|SUCCESS|8|0|15|107|56|RX|2001|epc.mnc000.mcc460.3gppnetwork.org;3354411601;2138;413||||2409:8809:8520:db82:0:0:0:0||ACCESS_NETWORK_INFO_REPORT|||460|0|9352|46087681|||||||||||460078135746513||8618813685600|c14-10-130-63-131-SZHSAEGW404BEr.szh.gd.node.epc.mnc000.mcc460.3gppnetwork.org;1459872049;208281384|IMS|".split("\\|",-1);
-			count--;
-		}
-		System.out.println(System.currentTimeMillis() - start1);
-		
-		start1 = System.currentTimeMillis();
-		count = 10000000;
-		while(count > 0){
-			splitString("RX_RAR_RAA_TRANSACTION|SUCCESS|8|0|15|107|56|RX|2001|epc.mnc000.mcc460.3gppnetwork.org;3354411601;2138;413||||2409:8809:8520:db82:0:0:0:0||ACCESS_NETWORK_INFO_REPORT|||460|0|9352|46087681|||||||||||460078135746513||8618813685600|c14-10-130-63-131-SZHSAEGW404BEr.szh.gd.node.epc.mnc000.mcc460.3gppnetwork.org;1459872049;208281384|IMS|","\\|");
-			count--;
+		StringBuilder sb1 = new StringBuilder();
+		sb1.append("|");
+		sb1.append("");
+		sb1.append("|");
+		System.out.println(sb1.length() == 2);
+		//Gson gson = new Gson();
+		AccessInfosArr access = JSON.parseObject("{'REQUIRED_ACCESS_INFO_ARRAY':[{'REQUIRED_ACCESS_INFO':'USER_LOCATION'},{'REQUIRED_ACCESS_INFO_ARRAY':{'REQUIRED_ACCESS_INFO':'USER_LOCATION2'}}]}",AccessInfosArr.class);
+		for(AccessInfo ai:access.getRequired_access_info_array()){
+			System.out.println("AccessInfosArr id=" + ai.getRequired_access_info());
 		}
 		
-		System.out.println(System.currentTimeMillis() - start1);
+		MediaComponentArr medias = JSON.parseObject("{'MEDIA_COMPONENT':[{'AF_APPLICATION_ID':'12345','MAX_REQUESTED_BANDWIDTH_UL':'49000','MAX_REQUESTED_BANDWIDTH_DL':'49000','SERVICE_ID_ARRAY':[{'SERVICE_ID':'VoLTE_Voice'}],'FLOW_STATUS':'DISABLED','MEDIA_TYPE':'AUDIO','MEDIA_COMPONENT_NUMBER':'1','RESULT_OF_DYNAMIC_SERVICE_CLASSIFICATION':'TRUE','MEDIA_SUBCOMPONENT':[{'FLOW_NUMBER':'1','FLOW_DESCRIPTION_ARRAY':[{'FLOW_DESCRIPTION':'permit in 17 from 2409:8809:8521:54e3:d175:98:64f1:159e 31036 to 0:0:0:0:0:0:0:0/0 65535'},{'FLOW_DESCRIPTION':'permit out 17 from 0:0:0:0:0:0:0:0/0 65535 to 2409:8809:8521:54e3:d175:98:64f1:159e 31036'}],'MAX_REQUESTED_BANDWIDTH_UL':'null','MAX_REQUESTED_BANDWIDTH_DL':'null','FLOW_STATUS':'null'},{'FLOW_NUMBER':'2','FLOW_DESCRIPTION_ARRAY':[{'FLOW_DESCRIPTION':'permit in 17 from 2409:8809:8521:54e3:d175:98:64f1:159e 31037 to 0:0:0:0:0:0:0:0/0 65535'},{'FLOW_DESCRIPTION':'permit out 17 from 0:0:0:0:0:0:0:0/0 65535 to 2409:8809:8521:54e3:d175:98:64f1:159e 31037'}],'MAX_REQUESTED_BANDWIDTH_UL':'null','MAX_REQUESTED_BANDWIDTH_DL':'null','FLOW_STATUS':'null'}]}]}",MediaComponentArr.class);
+		//RULE_INFORMATION rule = gson.fromJson("{'RULE_ID':'4294967291','NTP_SECONDS':'test','NTP_SECONDS':'test','AUTHORIZATION_STATE':'test','FAILURE_CODE':'1','ONE_TIME_REDIRECT':'test','QOS':{'BEARER_QCI':'test','ARP_PRIORITY_LEVEL':'test','ARP_PCI':'test','ARP_PVI':'test','BEARER_MBR_UL':'test','BEARER_MBR_DL':'test','BEARER_GBR_UL':'test','BEARER_GBR_DL':'test','APN_AMBR_UL':'test','APN_AMBR_DL':'test'},'CHARGING_INFO':{'RATING_GROUP':'test','SERVICE_IDENTIFIER':'test','REPORTING_LEVEL':'test','ONLINE':'test','OFFLINE':'test','METERING_METHOD':'test'}", RULE_INFORMATION.class);
 		
-		
-		start1 = System.currentTimeMillis();
-		count = 10000000;
-		while(count > 0){
-			splitString3("RX_RAR_RAA_TRANSACTION|SUCCESS|8|0|15|107|56|RX|2001|epc.mnc000.mcc460.3gppnetwork.org;3354411601;2138;413||||2409:8809:8520:db82:0:0:0:0||ACCESS_NETWORK_INFO_REPORT|||460|0|9352|46087681|||||||||||460078135746513||8618813685600|c14-10-130-63-131-SZHSAEGW404BEr.szh.gd.node.epc.mnc000.mcc460.3gppnetwork.org;1459872049;208281384|IMS|","|");
-			count--;
+		for(MediaComponent media:medias.getMedia_component()){
+			System.out.println("MediaComponent id=" + media.getAf_application_id());
+			System.out.println("MediaComponent status=" + media.getFlow_status());
+			System.out.println("MediaComponent type=" + media.getMedia_type());
 		}
-		
-		System.out.println(System.currentTimeMillis() - start1);
-		
-		
-		start1 = System.currentTimeMillis();
+		System.out.println("12345678".substring(0, 8));
+			
 		Map<Integer,String> map = new HashMap<Integer,String>(4);
 		map.put(0, "event");
 		map.put(1, "result");
 		map.put(9, "id");
 		map.put(13, "null");
 		
-		count = 10000000;
-		while(count > 0){
-			getSplitString("RX_RAR_RAA_TRANSACTION|SUCCESS|8|0|15|107|56|RX|2001|epc.mnc000.mcc460.3gppnetwork.org;3354411601;2138;413||||2409:8809:8520:db82:0:0:0:0||ACCESS_NETWORK_INFO_REPORT|||460|0|9352|46087681|||||||||||460078135746513||8618813685600|c14-10-130-63-131-SZHSAEGW404BEr.szh.gd.node.epc.mnc000.mcc460.3gppnetwork.org;1459872049;208281384|IMS|","|",map);
-			count--;
-		}
-		
-		System.out.println(System.currentTimeMillis() - start1);
-		
-		Map<String,String> res = getSplitString("RX_RAR_RAA_TRANSACTION|SUCCESS|8|0|15|107|56|RX|2001|epc.mnc000.mcc460.3gppnetwork.org;3354411601;2138;413||||2409:8809:8520:db82:0:0:0:0||ACCESS_NETWORK_INFO_REPORT|||460|0|9352|46087681|||||||||||460078135746513||8618813685600|c14-10-130-63-131-SZHSAEGW404BEr.szh.gd.node.epc.mnc000.mcc460.3gppnetwork.org;1459872049;208281384|IMS|","|",map);
+		Map<String,String> res = getSplitString("RX_RAR_RAA_TRANSACTION||SUCCESS|8|0|15|107|56|RX|2001|epc.mnc000.mcc460.3gppnetwork.org;3354411601;2138;413||||2409:8809:8520:db82:0:0:0:0||ACCESS_NETWORK_INFO_REPORT|||460|0|9352|46087681|||||||||||460078135746513||8618813685600|c14-10-130-63-131-SZHSAEGW404BEr.szh.gd.node.epc.mnc000.mcc460.3gppnetwork.org;1459872049;208281384|IMS|","|",map);
 		
 		for(String key:res.keySet()){
+			if(res.get(key) == null){
+				System.out.println("test null " + key + " = " + res.get(key));
+			}
 			System.out.println("test 4 " + key + " = " + res.get(key));
 		}
 		
@@ -290,7 +280,18 @@ public class test {
 		return arr;
 	}
 	
-	
+	public static class Information{
+		private RULE_INFORMATION rule_information;
+
+		public RULE_INFORMATION getRule_information() {
+			return rule_information;
+		}
+
+		public void setRule_information(RULE_INFORMATION rule_information) {
+			this.rule_information = rule_information;
+		}
+		
+	}
 	public static class User {
 		private Long id;
 		private String name;
