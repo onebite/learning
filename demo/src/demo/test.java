@@ -35,11 +35,10 @@ public class test {
 	public static void main(String[] args){
 		int i = 0;
 		int j = 1;
+		byte[] temp = new byte[0];
 		StringBuilder sb1 = new StringBuilder();
-		sb1.append("|");
-		sb1.append("");
-		sb1.append("|");
-		System.out.println(sb1.length() == 2);
+		sb1.append("120".getBytes());
+		System.out.println(sb1.toString());
 		//Gson gson = new Gson();
 		AccessInfosArr access = JSON.parseObject("{'REQUIRED_ACCESS_INFO_ARRAY':[{'REQUIRED_ACCESS_INFO':'USER_LOCATION'},{'REQUIRED_ACCESS_INFO_ARRAY':{'REQUIRED_ACCESS_INFO':'USER_LOCATION2'}}]}",AccessInfosArr.class);
 		for(AccessInfo ai:access.getRequired_access_info_array()){

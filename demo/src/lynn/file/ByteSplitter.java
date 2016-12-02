@@ -38,6 +38,12 @@ public class ByteSplitter {
 			}
 		}
 		
+		if(lastIndex < rawByte.length){
+			byte[] byteExtracted = new byte[rawByte.length - lastIndex];
+			System.arraycopy(rawByte, lastIndex, byteExtracted, 0, rawByte.length - lastIndex);
+			tokens.add(byteExtracted);
+		}
+		
 		return tokens;
 	}
 	
@@ -49,5 +55,4 @@ public class ByteSplitter {
 		byte[] pattern = delimiter.getBytes(encoding);
 		return splitByteArray(rawByte,pattern);
 	}
-	
 }
