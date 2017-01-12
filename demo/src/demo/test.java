@@ -31,21 +31,38 @@ import java.io.File;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 
+import java.lang.reflect.Field;
+
+import com.jsoniter.JsonIterator;
+
 public class test {
-	public static void main(String[] args){
+	public static void main(String[] args) throws Exception{
 		int i = 0;
 		int j = 1;
+		System.out.println(Integer.MIN_VALUE);
 		byte[] temp = new byte[0];
 		StringBuilder sb1 = new StringBuilder();
 		sb1.append("120".getBytes());
 		System.out.println(sb1.toString());
+		for(Field field:AccessInfosArr.class.getDeclaredFields()){
+			System.out.println("test:" + field.getName());
+		}
+		JsonIterator iter =  JsonIterator.parse("{'REQUIRED_ACCESS_INFO_ARRAY':{'REQUIRED_ACCESS_INFO':'USER_LOCATION','test':{'REQUIRED_ACCESS_INFO':'USER_LOCATION3'}}}".replace('\'', '"'));
+		//JsonIterator.enableStrictMode();
+		AccessInfos access1 = iter.read(AccessInfos.class);
+		System.out.println(access1 == null);
+		AccessInfo a = access1.getREQUIRED_ACCESS_INFO_ARRAY();
+		System.out.println("Jsoniter AccessInfosArr id=" + a.getREQUIRED_ACCESS_INFO());
+//		for(AccessInfo ai:access1.getREQUIRED_ACCESS_INFO_ARRAY()){
+//			System.out.println("Jsoniter AccessInfosArr id=" + ai.getREQUIRED_ACCESS_INFO());
+//		}
 		//Gson gson = new Gson();
 		AccessInfosArr access = JSON.parseObject("{'REQUIRED_ACCESS_INFO_ARRAY':[{'REQUIRED_ACCESS_INFO':'USER_LOCATION'},{'REQUIRED_ACCESS_INFO_ARRAY':{'REQUIRED_ACCESS_INFO':'USER_LOCATION2'}}]}",AccessInfosArr.class);
-		for(AccessInfo ai:access.getRequired_access_info_array()){
-			System.out.println("AccessInfosArr id=" + ai.getRequired_access_info());
+		for(AccessInfo ai:access.getREQUIRED_ACCESS_INFO_ARRAY()){
+			System.out.println("AccessInfosArr id=" + ai.getREQUIRED_ACCESS_INFO());
 		}
 		
-		MediaComponentArr medias = JSON.parseObject("{'MEDIA_COMPONENT':[{'AF_APPLICATION_ID':'12345','MAX_REQUESTED_BANDWIDTH_UL':'49000','MAX_REQUESTED_BANDWIDTH_DL':'49000','SERVICE_ID_ARRAY':[{'SERVICE_ID':'VoLTE_Voice'}],'FLOW_STATUS':'DISABLED','MEDIA_TYPE':'AUDIO','MEDIA_COMPONENT_NUMBER':'1','RESULT_OF_DYNAMIC_SERVICE_CLASSIFICATION':'TRUE','MEDIA_SUBCOMPONENT':[{'FLOW_NUMBER':'1','FLOW_DESCRIPTION_ARRAY':[{'FLOW_DESCRIPTION':'permit in 17 from 2409:8809:8521:54e3:d175:98:64f1:159e 31036 to 0:0:0:0:0:0:0:0/0 65535'},{'FLOW_DESCRIPTION':'permit out 17 from 0:0:0:0:0:0:0:0/0 65535 to 2409:8809:8521:54e3:d175:98:64f1:159e 31036'}],'MAX_REQUESTED_BANDWIDTH_UL':'null','MAX_REQUESTED_BANDWIDTH_DL':'null','FLOW_STATUS':'null'},{'FLOW_NUMBER':'2','FLOW_DESCRIPTION_ARRAY':[{'FLOW_DESCRIPTION':'permit in 17 from 2409:8809:8521:54e3:d175:98:64f1:159e 31037 to 0:0:0:0:0:0:0:0/0 65535'},{'FLOW_DESCRIPTION':'permit out 17 from 0:0:0:0:0:0:0:0/0 65535 to 2409:8809:8521:54e3:d175:98:64f1:159e 31037'}],'MAX_REQUESTED_BANDWIDTH_UL':'null','MAX_REQUESTED_BANDWIDTH_DL':'null','FLOW_STATUS':'null'}]}]}",MediaComponentArr.class);
+		MediaComponentArr medias = JSON.parseObject("{'MEDIA_COMPONENT':{'AF_APPLICATION_ID':'12345','MAX_REQUESTED_BANDWIDTH_UL':'49000','MAX_REQUESTED_BANDWIDTH_DL':'49000','SERVICE_ID_ARRAY':[{'SERVICE_ID':'VoLTE_Voice'}],'FLOW_STATUS':'DISABLED','MEDIA_TYPE':'AUDIO','MEDIA_COMPONENT_NUMBER':'1','RESULT_OF_DYNAMIC_SERVICE_CLASSIFICATION':'TRUE','MEDIA_SUBCOMPONENT':[{'FLOW_NUMBER':'1','FLOW_DESCRIPTION_ARRAY':[{'FLOW_DESCRIPTION':'permit in 17 from 2409:8809:8521:54e3:d175:98:64f1:159e 31036 to 0:0:0:0:0:0:0:0/0 65535'},{'FLOW_DESCRIPTION':'permit out 17 from 0:0:0:0:0:0:0:0/0 65535 to 2409:8809:8521:54e3:d175:98:64f1:159e 31036'}],'MAX_REQUESTED_BANDWIDTH_UL':'null','MAX_REQUESTED_BANDWIDTH_DL':'null','FLOW_STATUS':'null'},{'FLOW_NUMBER':'2','FLOW_DESCRIPTION_ARRAY':[{'FLOW_DESCRIPTION':'permit in 17 from 2409:8809:8521:54e3:d175:98:64f1:159e 31037 to 0:0:0:0:0:0:0:0/0 65535'},{'FLOW_DESCRIPTION':'permit out 17 from 0:0:0:0:0:0:0:0/0 65535 to 2409:8809:8521:54e3:d175:98:64f1:159e 31037'}],'MAX_REQUESTED_BANDWIDTH_UL':'null','MAX_REQUESTED_BANDWIDTH_DL':'null','FLOW_STATUS':'null'}]}}",MediaComponentArr.class);
 		//RULE_INFORMATION rule = gson.fromJson("{'RULE_ID':'4294967291','NTP_SECONDS':'test','NTP_SECONDS':'test','AUTHORIZATION_STATE':'test','FAILURE_CODE':'1','ONE_TIME_REDIRECT':'test','QOS':{'BEARER_QCI':'test','ARP_PRIORITY_LEVEL':'test','ARP_PCI':'test','ARP_PVI':'test','BEARER_MBR_UL':'test','BEARER_MBR_DL':'test','BEARER_GBR_UL':'test','BEARER_GBR_DL':'test','APN_AMBR_UL':'test','APN_AMBR_DL':'test'},'CHARGING_INFO':{'RATING_GROUP':'test','SERVICE_IDENTIFIER':'test','REPORTING_LEVEL':'test','ONLINE':'test','OFFLINE':'test','METERING_METHOD':'test'}", RULE_INFORMATION.class);
 		
 		for(MediaComponent media:medias.getMedia_component()){
@@ -137,8 +154,6 @@ public class test {
 		ArrayList<String> buffer = new ArrayList<String>(100);
 		
 		System.out.println(buffer.isEmpty());
-		
-		System.out.println(String.join(",", ",,,,,,,,,,,,,,123,,,,,,,,,,".split(",",Integer.MAX_VALUE)));
 		
 		SectionPropertiesMap sprop = new SectionPropertiesMap();
 		 //Properties sprop = new Properties();

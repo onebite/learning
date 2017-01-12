@@ -1,6 +1,7 @@
 package lynn.test;
 
 import lynn.file.MappedByteFileReader;
+import lynn.common.Fastu;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -9,6 +10,7 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
+import java.nio.charset.Charset;
 import java.io.File;
 
 import junit.framework.TestCase;
@@ -45,7 +47,7 @@ public class MappedByteReaderTest extends TestCase {
 	public void ByteReader(File file) throws Exception{
 		FileInputStream f = new FileInputStream(file);
 		FileChannel channel = f.getChannel();
-		MappedByteFileReader mReader = new MappedByteFileReader(channel,10*1024);
+		MappedByteFileReader mReader = new MappedByteFileReader(channel,8192);
 //		MappedByteBuffer mb = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
 //		MappedByteFileReader mReader = new MappedByteFileReader(mb,1*1024);
 		String line = null;
@@ -78,9 +80,10 @@ public class MappedByteReaderTest extends TestCase {
 		FileChannel channel = f.getChannel();
 		MappedByteBuffer mb = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
 		
+		//System.out.println("File size: " + channel.size());
 		int pos = 0;
 		int lastIndex = 0;
-		int nGet = mb.remaining() > 10240 ? 10240:mb.remaining();
+		int nGet = mb.remaining() > 8192 ? 8192:mb.remaining();
 		byte[] buffer = new byte[nGet];
 		mb.get(buffer, 0, nGet);
 		int found = 0;
@@ -90,18 +93,10 @@ public class MappedByteReaderTest extends TestCase {
 				break;
 			}
 			
-			if(buffer[pos] == '\n'){
-				//System.out.println(new String(buffer,lastIndex,pos - lastIndex));
-				found++;
-				//sb.append(new String(buffer,lastIndex,pos - lastIndex));
-				lastIndex = pos + 1;
-				//pos++;
-			}
-			
-			if(pos >= buffer.length - 1 && mb.hasRemaining()){
+			if(pos >= buffer.length && mb.hasRemaining()){
 				//remaining=1, missing one byte ?
 				//java.lang.ArrayIndexOutOfBoundsException ?
-				nGet = mb.remaining() > 10240 ? 10240:mb.remaining();
+				nGet = mb.remaining() > 8192 ? 8192:mb.remaining();
 				int remaining = pos - lastIndex;
 				if(remaining > 0){
 					byte[] temp = new byte[remaining];
@@ -117,6 +112,15 @@ public class MappedByteReaderTest extends TestCase {
 				
 				pos = 0;
 				lastIndex = 0;
+			}
+			
+			if(buffer[pos] == '\n'){
+				//System.out.println(new String(buffer,lastIndex,pos - lastIndex));
+				//System.out.println(Fastu.decode(buffer,lastIndex,pos - lastIndex));
+				found++;
+				//sb.append(new String(buffer,lastIndex,pos - lastIndex));
+				lastIndex = pos + 1;
+				//pos++;
 			}
 			
 			pos++;

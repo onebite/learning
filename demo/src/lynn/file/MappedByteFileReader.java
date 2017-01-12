@@ -51,6 +51,7 @@ public class MappedByteFileReader {
 		
 		for(;;){
 			if(this.remainingSize <= 0 && !this.curMapped.hasRemaining() && pos == this.remainingBufer.length){
+				this.nextPos = 0;
 				break;
 			}
 			
@@ -61,11 +62,11 @@ public class MappedByteFileReader {
 				pos = 0;
 			}
 			
-			if(pos >= this.remainingBufer.length - 1 && this.curMapped.hasRemaining()){
+			if(pos >= this.remainingBufer.length && this.curMapped.hasRemaining()){
 				nGet = curMapped.remaining() > defaultSize ? defaultSize:curMapped.remaining();
 				int remaining = pos - this.nextPos;
 				if(remaining > 0){
-					sb.append(new String(this.remainingBufer,this.nextPos,pos));
+					sb.append(new String(this.remainingBufer,this.nextPos,pos - this.nextPos));
 				}
 				
 				this.remainingBufer = new byte[nGet];
@@ -88,7 +89,11 @@ public class MappedByteFileReader {
 		this.lineNum++;
 		return sb.toString();
 	}
-	
+	/**
+	 * ToDo: Creating Strings is an more expensive thing, we should avoid or reduce it; later use byte[] to store the remaining.
+	 * @return
+	 * @throws IOException
+	 */
 	public String readLine() throws IOException{
 		if(this.bigMode){
 			return readLineFromChannel();
@@ -103,7 +108,7 @@ public class MappedByteFileReader {
 				break;
 			}
 			
-			if(pos >= remainingBufer.length - 1  && curMapped.hasRemaining()){
+			if(pos >= remainingBufer.length  && curMapped.hasRemaining()){
 				//remaining=1, missing one byte
 				//remaining=remainingBufer.length -1 and !curMapped.hasRemaining(), this.remainingBufer[pos] will have java.lang.ArrayIndexOutOfBoundsException
 				nGet = curMapped.remaining() > defaultSize ? defaultSize:curMapped.remaining();

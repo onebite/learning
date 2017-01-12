@@ -82,5 +82,7 @@
 	<classpathentry kind="lib" path="C:/workspace/source/hadooplib/zookeeper-3.4.5-transwarp.jar"/>
 	<classpathentry kind="lib" path="C:/workspace/backup/jars/gson.jar"/>
 	<classpathentry kind="lib" path="C:/workspace/backup/jars/fastjson-1.2.21.jar"/>
+	<classpathentry kind="lib" path="C:/workspace/source/hadooplib/javassist-3.21.0-GA.jar"/>
+	<classpathentry kind="lib" path="C:/workspace/repo/jsoniter/out/artifacts/jsoniter_jar/jsoniter.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,13 +1,13 @@
 package demo;
 
 public class AccessInfo {
-	public String getRequired_access_info() {
-		return required_access_info;
+	public String getREQUIRED_ACCESS_INFO() {
+		return REQUIRED_ACCESS_INFO;
 	}
 
-	public void setRequired_access_info(String required_access_info) {
-		this.required_access_info = required_access_info;
+	public void setREQUIRED_ACCESS_INFO(String required_access_info) {
+		this.REQUIRED_ACCESS_INFO = required_access_info;
 	}
 
-	private String required_access_info;
+	private String REQUIRED_ACCESS_INFO;
 }
