@@ -5,12 +5,12 @@ import com.alibaba.fastjson.TypeReference;
 
 import com.google.gson.Gson;
 
+import java.io.*;
 import java.util.regex.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.text.SimpleDateFormat;
-import java.io.File;
 import java.util.UUID;
 
 import org.nutz.json.Json;
@@ -18,8 +18,6 @@ import org.nutz.lang.Lang;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Properties;
 import java.util.Set;
 import java.util.List;
@@ -28,6 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.io.File;
+import java.io.FileInputStream;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 
@@ -39,6 +38,29 @@ public class test {
 	public static void main(String[] args) throws Exception{
 		int i = 0;
 		int j = 1;
+		String sss = ",,,,,,,,";
+		System.out.println(sss.lastIndexOf(",",sss.lastIndexOf(",")));
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(
+				new FileInputStream("C:\\workspace\\source\\demo\\test.properties")));
+		String ln = null;
+		while((ln = reader.readLine()) != null){
+			if(ln.contains("\n") || ln.contains("\r"))
+				System.out.println("line contains linefeed"+ln);
+		}
+
+		reader.close();
+
+		int total = 0;
+		int[] ss = new int[]{34,35,33,32,24,27,28,30,31,21,22,23,25,26,29,20,16,19,17,18,15,14,12,13,10,11,9,6,7,8,5,2,3,4,1,0,};
+		for(int s :ss){
+			//s = s + 57;
+			String sb = new StringBuilder().append((char)(s + 33)).toString();
+			System.out.println("String " + sb + " hashcode" + sb.hashCode()%36);
+		}
+
+		String test = "460003006764786_20151208192643376_05|SZ,05,19,20151208192643376,460003006764786,3520380655376808,SUCCESS,0,2,22661222,88520,872,220,,9349,1-9,8613823746001,NAS,NORMAL,117.142.1.13,NORMAL,,,,,1-5,1-5,1-0,799,,1,SGW,,,";
+		System.out.println("Index " + test.indexOf("|"));
 		System.out.println(Integer.MIN_VALUE);
 		byte[] temp = new byte[0];
 		StringBuilder sb1 = new StringBuilder();

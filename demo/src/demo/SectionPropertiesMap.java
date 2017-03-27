@@ -61,7 +61,8 @@ public class SectionPropertiesMap {
 	        boolean isSection = line.indexOf(']',pos) != -1;
 	        
 	        //deal with \ line feed
-	        boolean needsEscape = line.indexOf('\\', pos) != -1;
+	        boolean needsEscape = line.indexOf('\\', line.length()-1) != -1;
+			//boolean needsEscape = false;
 	        StringBuilder key = needsEscape ? new StringBuilder() : null;
 	        
 	        while (pos < line.length() && ! Character.isWhitespace(c = line.charAt(pos++))
