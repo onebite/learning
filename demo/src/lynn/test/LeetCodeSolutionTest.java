@@ -9,7 +9,20 @@ import org.junit.runner.RunWith;
 import org.junit.Assert;
 
 public class LeetCodeSolutionTest extends TestCase{
-
+	public void test_combinationSum() throws Exception{
+		LeetCodeSolution ls = new LeetCodeSolution();
+		int[] candidates = new int[]{2,3,6,7};
+		List<List<Integer>> result = ls.combinationSum(candidates,7);
+		for(List<Integer> item:result){
+			StringBuilder sb = new StringBuilder("answer :");
+			for(Integer i : item){
+				sb.append(" ");
+				sb.append(i);
+			}
+			sb.append("\n");
+			System.out.print(sb.toString());
+		}
+	}
 	public void test_solveSudoku() throws  Exception{
 		LeetCodeSolution ls = new LeetCodeSolution();
 		char[][] board = new char[][]{
@@ -24,6 +37,7 @@ public class LeetCodeSolutionTest extends TestCase{
 				{'.','.','.','.','.','.','.','.','.'}
 		};
 		ls.solveSudoku(board);
+		Assert.assertEquals('2',board[0][1]);
 	}
 
 	public void test_findSubstring() throws Exception{

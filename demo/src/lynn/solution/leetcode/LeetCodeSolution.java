@@ -8,6 +8,98 @@ import java.util.regex.Pattern;
 public class LeetCodeSolution {
 	public static final int INTEGER_MAX_LENGTH = String.valueOf(Long.MAX_VALUE).length();
 
+	/**Given an unsorted integer array, find the first missing positive integer.
+	 * For example,
+	 * Given [1,2,0] return 3,
+	 * and [3,4,-1,1] return 2.
+	 * Your algorithm should run in O(n) time and uses constant space
+	 *
+	 * @param nums
+	 * @return
+	 */
+	public int firstMissingPositive(int[] nums) {
+		if(nums == null || nums.length == 0)
+			return 0;
+		int missing = 1;
+		for(int i=0;i < nums.length;i++){
+			if(nums[i] <= 0)
+				continue;
+
+		}
+
+		return missing;
+	}
+	/**
+	 * Given a set of candidate numbers (C) (without duplicates) and a target number (T),
+	 * find all unique combinations in C where the candidate numbers sums to T.
+	 * @param candidates
+	 * @param target
+	 * @return
+	 */
+	public List<List<Integer>> combinationSum(int[] candidates, int target) {
+		List<List<Integer>> result = new ArrayList<List<Integer>>();
+		if(candidates == null || candidates.length == 0)
+			return result;
+		Arrays.sort(candidates);
+		List<Integer> current = new ArrayList<Integer>();
+		backTraceSum(result,current,candidates,target,-1);
+		return result;
+	}
+
+	public boolean backTraceSum(List<List<Integer>> result,List<Integer> current,int[] candidates,int target,int index){
+		if(target == 0){
+			List<Integer> temp = new ArrayList<>(current);
+			result.add(temp);
+			return true;
+		}
+		int pre = -1;
+		for(int i=index+1;i < candidates.length;i++){
+			if(target < candidates[i])
+				return false;
+			if(pre == candidates[i])
+				continue;
+			current.add(candidates[i]);
+			backTraceSum(result,current,candidates,target-candidates[i],i);
+			current.remove(current.size()-1);
+			pre = candidates[i];
+		}
+
+		return true;
+	}
+
+	/**
+	 * 怎么确定第n行字符串呢？他的这个是有规律的。
+	 * n = 1时，打印一个1。
+	 * n = 2时，看n=1那一行，念：1个1，所以打印：11。
+	 * n = 3时，看n=2那一行，念：2个1，所以打印：21。
+	 * n = 4时，看n=3那一行，念：一个2一个1，所以打印：1211。
+	 * @param n
+	 * @return
+	 */
+	public String countAndSay(int n) {
+		StringBuilder curr = new StringBuilder("1");
+		StringBuilder pre;
+		int rows;
+		char say;
+		for(int i=1;i < n;i++){
+			pre = curr;
+			curr = new StringBuilder();
+			rows = 1;
+			say = pre.charAt(0);
+			for(int j = 1;j < pre.length();j++){
+				if(pre.charAt(j) != say){
+					curr.append(rows).append(say);
+					rows = 1;
+					say = pre.charAt(j);
+				}
+				else
+					rows++;
+			}
+			curr.append(rows).append(say);
+		}
+		return curr.toString();
+	}
+
 	public void solveSudoku(char[][] board) {
 		if(board == null || board.length == 0)
 			return;
@@ -33,18 +125,15 @@ public class LeetCodeSolution {
 	}
 
 	public boolean isSudokuValidNumber(char[][] board,int row,int column,char c){
-		for(int i = 0;i <= row;i++){
-			for(int j = 0;j < column;j++){
-				if(board[i][j] == c)
-					return false;
-			}
+		for(int j = 0;j < 9;j++){
+			if(j != column && board[row][j] == c)
+				return false;
 		}
 
-		for(int i = 0;i <= row;i++){
-			for(int j = 0;j < column;j++){
-				if(board[j][i] == c)
-					return false;
-			}
+		//check column
+		for(int i = 0;i < 9;i++){
+			if(i != row && board[i][column] == c)
+				return false;
 		}
 
 		for(int i = row/3*3;i < row/3*3+3;i++){
