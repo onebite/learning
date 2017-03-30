@@ -8,6 +8,94 @@ import java.util.regex.Pattern;
 public class LeetCodeSolution {
 	public static final int INTEGER_MAX_LENGTH = String.valueOf(Long.MAX_VALUE).length();
 
+	public boolean isMatch2(String s, String p) {
+		int si = 0,pi=0;
+		int ssi = 0,ppi = -1;
+		while(si < s.length()){
+			if(pi < p.length() && (p.charAt(pi) == '?' || s.charAt(si) == p.charAt(pi))){
+				pi++;
+				si++;
+				continue;
+			}
+			if(pi < p.length() && p.charAt(pi) == '*'){
+				ppi = pi++;
+				ssi = si;
+				continue;
+			}
+			if(ppi > -1){
+				pi = ppi + 1;
+				si = ++ ssi;
+				continue;
+			}
+			return false;
+		}
+		while(pi < p.length() && p.charAt(pi) == '*')
+			pi++;
+
+		return pi == p.length()-1 && si == s.length();
+	}
+	public String multiply(String num1, String num2) {
+		if(num1 == null && num2 == null)
+			return null;
+		String n1 = new StringBuilder(num1).reverse().toString();
+		String n2 = new StringBuilder(num2).reverse().toString();
+		int[] d = new int[n1.length()+n2.length()];
+		for(int i = 0;i < n1.length();i++){
+			for(int j = 0;j < n2.length();j++){
+				d[i+j] += (n1.charAt(i) - '0') * (n2.charAt(j) - '0');
+			}
+		}
+
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0;i < d.length;i++){
+			int mod = d[i] % 10;
+			int carry = d[i] / 10;
+			if(i+1 < d.length){
+				d[i+1] += carry;
+			}
+			sb.insert(0,mod);
+		}
+		while(sb.charAt(0) == '0' && sb.length() > 1){
+			sb.deleteCharAt(0);
+		}
+
+		return sb.toString();
+	}
+
+	/**Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it is able to trap after raining.
+	 * For example,
+	 * Given [0,1,0,2,1,0,1,3,2,1,2,1], return 6
+	 *
+	 * @param height
+	 * @return
+	 */
+	public int trap(int[] height) {
+		if(height == null || height.length == 0)
+			return 0;
+		//Stack<Integer> stack = new Stack<>();
+		int maxIndex = 0;
+		int sum = 0;
+		int len = height.length;
+		for(int i=0;i < len;i++){
+			if(height[maxIndex] < height[i])
+				maxIndex = i;
+		}
+		int root = height[0];
+		for(int i=0;i < maxIndex;i++){
+			if(root < height[i]) root = height[i];
+			else
+				sum += (root - height[i]);
+		}
+		root = height[len-1];
+		for(int i=len-1;i > maxIndex;i--){
+			if(root < height[i]) root = height[i];
+			else
+				sum += (root - height[i]);
+		}
+
+		return sum;
+	}
+
 	/**Given an unsorted integer array, find the first missing positive integer.
 	 * For example,
 	 * Given [1,2,0] return 3,
@@ -19,15 +107,23 @@ public class LeetCodeSolution {
 	 */
 	public int firstMissingPositive(int[] nums) {
 		if(nums == null || nums.length == 0)
-			return 0;
-		int missing = 1;
-		for(int i=0;i < nums.length;i++){
-			if(nums[i] <= 0)
-				continue;
-
+			return 1;
+		int i = 0;
+		for(;i < nums.length;){
+			if(nums[i] <= 0 || nums[i] == i+1 || nums[i] > nums.length|| nums[i] == nums[nums[i]-1])
+				i++;
+			else{
+				int temp = nums[nums[i]-1];
+				nums[nums[i]-1] = nums[i];
+				nums[i] = temp;
+			}
 		}
 
-		return missing;
+		for(i = 0;i < nums.length;i++)
+			if(nums[i] != i+1)
+				break;
+
+		return  i+1 ;
 	}
 	/**
 	 * Given a set of candidate numbers (C) (without duplicates) and a target number (T),

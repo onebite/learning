@@ -9,6 +9,17 @@ import org.junit.runner.RunWith;
 import org.junit.Assert;
 
 public class LeetCodeSolutionTest extends TestCase{
+	public void test_isMatch2() throws Exception{
+		LeetCodeSolution ls = new LeetCodeSolution();
+		Assert.assertEquals(true,ls.isMatch2("aa","aa"));
+	}
+
+	public void test_firstMissingPositive() throws Exception{
+		LeetCodeSolution ls = new LeetCodeSolution();
+		int[] nums = new int[]{-1,3,4,10,5,7,8,9,-2};
+		int num = ls.firstMissingPositive(nums);
+		Assert.assertEquals(6,num);
+	}
 	public void test_combinationSum() throws Exception{
 		LeetCodeSolution ls = new LeetCodeSolution();
 		int[] candidates = new int[]{2,3,6,7};
