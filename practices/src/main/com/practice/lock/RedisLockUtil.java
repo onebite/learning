@@ -8,9 +8,44 @@ import com.practice.cache.RedisManager;
  */
 public class RedisLockUtil {
     private static final int defaultExpire = 60;
+    private static final String LOCK_SUCCESS = "OK";
+    private static final String SET_IF_NOT_EXIST = "NX";
+    private static final String SET_WITH_EXPIRE_TIME = "PX";
 
     public RedisLockUtil() {
     }
+
+
+    /**
+     *
+     * 获取分布式锁
+     * @param lockKey
+     * @param requestId
+     * @param timeout
+     * @return
+     */
+    public static boolean tryGetDistributedLock(String lockKey,String requestId,int timeout){
+        String result = RedisManager.I.set(lockKey,requestId,SET_IF_NOT_EXIST,SET_WITH_EXPIRE_TIME,timeout);
+        if(LOCK_SUCCESS.equals(result)){
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public static boolean releaseDistributedLock(String lokKey,String requestId){
+        String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+
+    }
+
+
+
+
+
+
+
+
 
     /**
      * 加锁

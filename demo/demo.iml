@@ -7,6 +7,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="junit-4.12" level="project" />
+    <orderEntry type="library" name="log4j-1.2.17" level="project" />
+    <orderEntry type="library" name="fastjson-1.2.16" level="project" />
+    <orderEntry type="library" name="nutz-1.b.34" level="project" />
+    <orderEntry type="library" name="hadooplib" level="project" />
     <orderEntry type="library" name="jsoniter" level="project" />
   </component>
 </module>

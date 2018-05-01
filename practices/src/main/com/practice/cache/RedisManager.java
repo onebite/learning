@@ -40,6 +40,19 @@ public class RedisManager {
         log.info("init redis success.....");
     }
 
+
+    private <R> R callStript(Function<ScriptingCommands,R> function,R d){
+        try {
+            if(factory.isCluster()){
+                return function.apply(factory.getClusterConnection());
+            }else{
+                return function.apply(factory.getJedisConnection());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private <R> R call(Function<JedisCommands, R> function, R d) {
         if (factory.isCluster()) {
             try {
@@ -57,6 +70,7 @@ public class RedisManager {
             }
         }
     }
+
 
     private void call(Consumer<JedisCommands> consumer) {
         if (factory.isCluster()) {
@@ -77,10 +91,14 @@ public class RedisManager {
     }
 
     public String getSet(String key,String value){
-        String old  = call(jedis -> jedis.get(key), null);
-        set(key,value);
+        String old  = call(jedis -> jedis.getSet(key,value), null);
 
         return old;
+    }
+
+
+    public String eval(String script,int keycount,String... args){
+        call(jedis -> jedis.eval(script,));
     }
 
     public long setnx(String key,String value){
@@ -134,6 +152,13 @@ public class RedisManager {
                 jedis.expire(key, time);
             }
         });
+    }
+
+
+    public String set(String key, String value, String nxxx, String expx, long timeout){
+
+
+        return call(jedisCommands -> jedisCommands.set(key,value,nxxx,expx,timeout),"");
     }
 
     public void del(String key) {

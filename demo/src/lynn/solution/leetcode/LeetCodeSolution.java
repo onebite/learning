@@ -1,12 +1,438 @@
 package lynn.solution.leetcode;
 
 
+import org.apache.avro.generic.GenericData;
+import scala.Int;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Map.Entry;
 
 public class LeetCodeSolution {
 	public static final int INTEGER_MAX_LENGTH = String.valueOf(Long.MAX_VALUE).length();
+	private int intResult = 0;
+
+	public static class Interval{
+		int start;
+		int end;
+		public Interval(){
+			start=0;
+			end=0;
+		}
+
+		public Interval(int s,int e){
+			start = s;
+			end = e;
+		}
+	}
+
+	/**
+	 * 假设有n个元素，第K个permutation是a1, a2, a3, .....   ..., an
+	 * 那么a1是哪一个数字呢？
+	 * 我们可以把a1去掉，那么剩下的permutation为
+	 * a2, a3, .... .... an, 共计n-1个元素。 n-1个元素共有(n-1)!组排列，那么这里就可以知道
+	 * 设变量K1 = K - 1
+	 * a1 = K1 / (n-1)! + 1
+	 * 同理，a2的值可以推导为
+	 * a2 = K2 / (n-2)! + 1
+	 * K2 = K1 % (n-1)! + 1
+	 * .......
+	 * a(n-1) = K(n-1) / 1! + 1
+	 * K(n-1) = K(n-2) /2!
+	 * an = K(n-1) + 1
+	 * @param n
+	 * @param k
+	 * @return
+	 */
+	public String getPermutation(int n, int k) {
+		int i=0,j=0;
+		int[] data = new int[n];
+		boolean[] used = new boolean[n];
+		data[0] = 1;
+		for(i=1;i < n;i++)
+			data[i] = data[i-1]*i;
+		--k;
+		StringBuilder sb  = new StringBuilder();
+		while(--i >= 0){
+			int rank = k / data[i];
+			for(j=0;j<=rank;j++)
+				if(used[j]) rank++;
+			used[rank] = true;
+			sb.append(j);
+			k = k % data[i];
+		}
+
+		return sb.toString();
+	}
+
+	public int lengthOfLastWord(String s) {
+		if(s == null || s.length() == 0)
+			return 0;
+
+		int i = s.length() - 1;
+		int len = 0;
+		while(i > 0 && s.charAt(i) == ' ')
+			i--;
+
+		while(i >= 0){
+			i--;
+			len++;
+			if(s.charAt(i) == ' ')
+				break;
+		}
+
+		return len;
+		//return s.trim().length()-s.trim().lastIndexOf(" ")-1;
+	}
+
+	public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
+		if(newInterval == null)
+			return intervals;
+
+		if(intervals.size() < 1){
+			intervals.add(newInterval);
+			return intervals;
+		}
+
+		Interval temp = new Interval(newInterval.start,newInterval.end);
+		List<Interval> result = new ArrayList<>();
+
+		for(Interval interval:intervals){
+			if(interval.end < temp.start)
+				result.add(interval);
+			else if(interval.start > temp.end){
+				result.add(temp);
+				temp = interval;
+			}
+			else if(interval.start < temp.start || interval.end > temp.end){
+				temp = new Interval(Math.min(interval.start,temp.start),Math.max(interval.end,temp.end));
+			}
+		}
+		result.add(temp);
+
+		return result;
+	}
+
+
+	public List<Interval> merge2(List<Interval> intervals) {
+		List<Interval> ans = new ArrayList<>();
+		if(intervals == null || intervals.size() < 2)
+			return intervals;
+
+		int[] starts = new int[intervals.size()];
+		int[] ends = new int[intervals.size()];
+
+		for(int i = 0; i < intervals.size();i++){
+			Interval temp = intervals.get(i);
+			starts[i] = temp.start;
+			ends[i] = temp.end;
+		}
+
+		Arrays.sort(starts);
+		Arrays.sort(ends);
+
+		for(int i=0,j=0;i < intervals.size();i++){
+			if(i == intervals.size() - 1 || starts[i+1] > ends[i]){
+				ans.add(new Interval(starts[j],ends[i]));
+				j = i+1;
+			}
+		}
+		return ans;
+	}
+
+	public List<Interval> merge(List<Interval> intervals) {
+		List<Interval> ans = new ArrayList<>();
+		if(intervals == null || intervals.size() < 2)
+			return intervals;
+
+		Collections.sort(intervals, new Comparator<Interval>() {
+					@Override
+					public int compare(Interval o1, Interval o2) {
+						return o1.start - o2.start;
+					}
+				});
+
+		Interval  pre = null;
+		for(Interval item:intervals){
+			if(pre == null || pre.end < item.start){
+				ans.add(item);
+				pre = item;
+			}
+			else if(pre.end < item.end){
+				pre.end = item.end;
+			}
+		}
+
+		return ans;
+	}
+
+	public boolean canJump(int[] nums) {
+		int lenght = nums.length;
+		int step = 0,cur = 0,i = 0,pre = 0;
+		while(cur < lenght - 1){
+			pre = cur;
+			while(i <= pre){
+				cur = Math.max(cur,nums[i]+i);
+				i++;
+			}
+			++step;
+			if(pre == cur) return false;
+		}
+
+		return true;
+	}
+
+	public int maxSubArray(int[] nums) {
+		int[] sum = new int[nums.length];
+		sum[0] = nums[0];
+		int max = sum[0];
+		for(int i = 1;i < nums.length;i++){
+			sum[i] = Math.max(nums[i],sum[i-1]+nums[i]);
+			max = Math.max(sum[i],max);
+		}
+
+		return max;
+	}
+
+	/**
+	 * puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other
+	 * @param n
+	 * @return
+	 */
+	public List<List<String>> solveNQueens(int n) {
+		List<List<String>> result = new ArrayList<>();
+		if(n <= 0 )
+			return result;
+		int[] columVals = new int[n];
+		backTraceSolveNQueens(n,result,0,columVals);
+
+		return result;
+	}
+
+	public int totalNQueens(int n) {
+		if(n <= 0 )
+			return intResult;
+		int[] columnVals = new int[n];
+		backTraceSolveNQueensOfNumber(n,0,columnVals);
+
+		return intResult;
+	}
+
+
+	public void backTraceSolveNQueensOfNumber(int nQueens,int row,int[] columnVals){
+		if(row == nQueens){
+			intResult++;
+		}
+		else{
+			for(int i=0;i < nQueens;i++){
+				columnVals[row] = i;
+				if(isValidNQueens(row,columnVals)){
+					backTraceSolveNQueensOfNumber(nQueens,row+1,columnVals);
+				}
+			}
+		}
+	}
+
+
+	public void backTraceSolveNQueens(int nQueens,List<List<String>> result,int row,int[] columnVals){
+		if(row == nQueens){
+			List<String> unit = new ArrayList<>(nQueens);
+			for(int i = 0;i < nQueens;i++){
+				StringBuilder sb = new StringBuilder();
+				for(int j = 0;j < nQueens;j++){
+					if(j == columnVals[i])
+						sb.append('Q');
+					else
+						sb.append('.');
+				}
+				unit.add(sb.toString());
+			}
+			result.add(unit);
+		}
+		else{
+			for(int i=0;i < nQueens;i++){
+				columnVals[row] = i;
+				if(isValidNQueens(row,columnVals)){
+					backTraceSolveNQueens(nQueens,result,row+1,columnVals);
+				}
+			}
+		}
+	}
+
+	public boolean isValidNQueens(int row,int[] columnVals){
+		for(int i=0;i < row;i++){
+			if(columnVals[row] == columnVals[i] || Math.abs(columnVals[row] - columnVals[i]) == row - i)
+				return false;
+		}
+
+		return true;
+	}
+
+	public double myPow(double x, int n) {
+		int nn = Math.abs(n);
+		if(n == 0 )
+			return 1;
+		if(n == 1)
+			return x;
+		double v = myPow(x,nn/2);
+		double res = v*v;
+		if(nn%2 != 0)
+			res = res * x;
+
+		if(res == 0)
+			return  0;
+		return n < 0 ? 1/res:res;
+	}
+
+	/**
+	 * Given an array of strings, group anagrams together.
+	 * For example, given: ["eat", "tea", "tan", "ate", "nat", "bat"],
+	 * @param strs
+	 * @return
+	 */
+	public List<List<String>> groupAnagrams(String[] strs) {
+		List<List<String>> result = new ArrayList<>();
+		if(strs == null || strs.length == 0)
+			return result;
+		Map<String,List<String>>  map = new HashMap<>();
+		for(String str:strs){
+			char[] chs = str.toCharArray();
+			Arrays.sort(chs);
+			String sorted = new String(chs);
+			if(map.containsKey(sorted))
+				map.get(sorted).add(str);
+			else{
+				List<String> vals = new ArrayList<String>();
+				vals.add(str);
+				map.put(sorted,vals);
+			}
+		}
+
+		for(List<String> val:map.values()){
+			if(val.size() > 0)
+				result.add(val);
+		}
+
+		return result;
+	}
+
+	/**
+	 * You are given an n x n 2D matrix representing an image.
+	 * Rotate the image by 90 degrees (clockwise).
+	 * Follow up:
+	 * Could you do this in-place?
+	 * @param matrix
+	 */
+	public void rotate(int[][] matrix) {
+		int edge = matrix.length - 1;
+		int nEdge,col,val;
+		for(int row = 0;row < edge;row++){
+			nEdge = edge;
+			for(col = row;col <edge;col++,nEdge--){
+				val = matrix[row][col];
+				matrix[row][col] = matrix[nEdge][row];
+				matrix[nEdge][row] = matrix[edge][nEdge];
+				matrix[edge][nEdge] = matrix[col][edge];
+				matrix[col][edge] = val;
+			}
+			edge--;
+		}
+
+		return;
+	}
+
+	public List<List<Integer>> permuteUnique(int[] nums) {
+		List<List<Integer>> result = new ArrayList<List<Integer>>();
+		if(nums == null || nums.length == 0)
+			return result;
+
+		List<Integer> current = new ArrayList<Integer>(nums.length);
+		boolean[] visited = new boolean[nums.length];
+		Arrays.sort(nums);
+		backTracePermuteUnique(result,current,nums,visited);
+		return result;
+	}
+
+	public boolean backTracePermuteUnique(List<List<Integer>> result,List<Integer> current,int[] candinates,boolean[] visited){
+		if(current.size() == candinates.length){
+			List<Integer> temp = new ArrayList<>(current);
+			result.add(temp);
+			return true;
+		}
+
+		for(int i = 0;i < candinates.length;i++){
+			if(i > 0 && candinates[i] == candinates[i-1] && visited[i-1] == false)//nums按顺序排列
+				continue;
+			if(!visited[i]){
+				visited[i] = true;
+				current.add(candinates[i]);
+				backTracePermuteUnique(result,current,candinates,visited);
+				current.remove(current.size()-1);
+				visited[i] = false;
+			}
+		}
+
+		return true;
+	}
+
+	public List<List<Integer>> permute(int[] nums) {
+		List<List<Integer>> result = new ArrayList<List<Integer>>();
+		if(nums == null || nums.length == 0)
+			return result;
+
+		List<Integer> current = new ArrayList<Integer>(nums.length);
+		boolean[] visited = new boolean[nums.length];
+		backTracePermute(result,current,nums,visited);
+		return result;
+	}
+
+	public boolean backTracePermute(List<List<Integer>> result,List<Integer> current,int[] candinates,boolean[] visited){
+		if(current.size() == candinates.length){
+			List<Integer> temp = new ArrayList<>(current);
+			result.add(temp);
+			return true;
+		}
+
+		for(int i = 0;i < candinates.length;i++){
+			if(!visited[i]){
+				visited[i] = true;
+				current.add(candinates[i]);
+				backTracePermute(result,current,candinates,visited);
+				current.remove(current.size()-1);
+				visited[i] = false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Given an array of non-negative integers, you are initially positioned at the first index of the array.
+	 * Each element in the array represents your maximum jump length at that o.
+	 * Your goal is to reach the last index in the minimum number of jumps.
+	 * For example:
+	 * Given array A = [2,3,1,1,4]
+	 * The minimum number of jumps to reach the last index is 2. (Jump 1 step from index 0 to 1, then 3 steps to the last index.)
+	 * @param nums
+	 * @return
+	 */
+	public int jump(int[] nums) {
+		int len = nums.length;
+		int step = 0,cur = 0,i = 0;
+		while(cur < len-1){
+			int pre = cur;
+			while(i <= pre){
+				cur = Math.max(cur,nums[i]+i);
+				++i;
+			}
+			++step;
+			if(pre == cur) return -1;
+		}
+
+		return step;
+	}
+
 
 	public boolean isMatch2(String s, String p) {
 		int si = 0,pi=0;
@@ -34,6 +460,7 @@ public class LeetCodeSolution {
 
 		return pi == p.length()-1 && si == s.length();
 	}
+
 	public String multiply(String num1, String num2) {
 		if(num1 == null && num2 == null)
 			return null;

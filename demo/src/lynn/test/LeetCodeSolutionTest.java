@@ -2,16 +2,66 @@ package lynn.test;
 
 import lynn.solution.leetcode.LeetCodeSolution;
 import lynn.solution.leetcode.ListNode;
+import lynn.solution.leetcode.LeetCodeSolution.Interval;
 
+import java.util.ArrayList;
 import java.util.List;
 import junit.framework.TestCase;
-import org.junit.runner.RunWith;
+//import org.junit.runner.RunWith;
 import org.junit.Assert;
 
 public class LeetCodeSolutionTest extends TestCase{
+
+	public void test_insert() throws Exception{
+		LeetCodeSolution ls = new LeetCodeSolution();
+		Interval ni = new Interval(0,3);
+		List<Interval> li = new ArrayList<Interval>();
+		li.add(new Interval(1,5));
+		ls.insert(li,ni);
+	}
+
+	public void test_canJump() throws Exception{
+
+	}
+
+	public void test_maxSubArray() throws Exception{
+		LeetCodeSolution ls = new LeetCodeSolution();
+		int[] nums = new int[]{3,4,2,-1,5,-7,9,-1,-2,4,6};
+		ls.maxSubArray(nums);
+	}
+
+	public void test_solveNQueens() throws Exception{
+		LeetCodeSolution ls = new LeetCodeSolution();
+		ls.solveNQueens(4);
+	}
+
+	public void test_myPow() throws Exception{
+		LeetCodeSolution ls = new LeetCodeSolution();
+		double res = ls.myPow(34.00515,-3);
+	}
+
+	public  void test_groupAnagrams() throws Exception{
+		LeetCodeSolution ls = new LeetCodeSolution();
+		String[] strs = new String[]{""};
+		ls.groupAnagrams(strs);
+	}
+
+	public void test_permute() throws Exception{
+		LeetCodeSolution ls = new LeetCodeSolution();
+		int[] nums = new int[]{1,2,3};
+		List<List<Integer>> result = ls.permute(nums);
+
+	}
+
+	public void test_jump() throws Exception{
+		LeetCodeSolution ls = new LeetCodeSolution();
+		int[] nums = new int[]{2,3,1,1,4};
+		int steps = ls.jump(nums);
+        Assert.assertEquals(2,steps);
+	}
 	public void test_isMatch2() throws Exception{
 		LeetCodeSolution ls = new LeetCodeSolution();
-		Assert.assertEquals(true,ls.isMatch2("aa","aa"));
+		Assert.assertEquals(true,ls.isMatch2("aabbbb","a*"));
 	}
 
 	public void test_firstMissingPositive() throws Exception{
@@ -58,7 +108,7 @@ public class LeetCodeSolutionTest extends TestCase{
 		};
 		String s = "bestwordgoodgoodgoodbestword";
 		List<Integer> rest = ls.findSubstring(s,words);
-		Assert.assertEquals(0,rest.get(0));
+		Assert.assertEquals(0,(long)rest.get(0));
 	}
 	public void test_divide() throws Exception{
 		LeetCodeSolution ls = new LeetCodeSolution();

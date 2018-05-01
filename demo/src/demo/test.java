@@ -1,9 +1,9 @@
 package demo;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
+//import com.alibaba.fastjson.TypeReference;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 
 import java.io.*;
 import java.util.regex.*;
@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.text.SimpleDateFormat;
-import java.util.UUID;
+//import java.util.UUID;
 
 import org.nutz.json.Json;
-import org.nutz.lang.Lang;
+//import org.nutz.lang.Lang;
 import java.util.Map;
-import java.util.Map.Entry;
+//import java.util.Map.Entry;
 import java.util.StringTokenizer;
 import java.util.Properties;
 import java.util.Set;
@@ -197,7 +197,7 @@ public class test {
 		 
 		 System.out.println(s);
 		 
-		 System.out.println(LoadSample.reverse2("[abcdef]"));
+		 //System.out.println(LoadSample.reverse2("[abcdef]"));
 		 
 		 System.out.println("end1");
 		 
@@ -205,15 +205,7 @@ public class test {
 		 int pos = 0;
 		 System.out.println(line.indexOf('['));
 		 System.out.println(line.charAt(pos++));
-		 
-		 LoadSample ls = new LoadSample();
-		 
-		 String filename = "A20151208.1703+0800-20151208.1704+0800_0.SZHSAEGW303BEr.BEARER_CREATION.csv.gz";
-		 
-		System.out.println(filename.substring(10, 12));
-		String g = ls.getNameGroup("A20151208.1703+0800-20151208.1704+0800_0.SZHSAEGW303BEr.BEARER_CREATION.csv.gz", "^.*?\\..*?\\..*?\\.[A-Za-z]*(\\d+)[A-Za-z]*\\..*", 1);
-		// String g = ls.getNameGroup("sjflsjfl.l_attach.csv.gz", "(\\w+)\\.(\\w+)\\.csv\\.gz$", 1);
-		System.out.println(g);
+
 	}
 	
 	public static Map<String,String> getSplitString(String str,String delimiter,Map<Integer,String> needMap){
