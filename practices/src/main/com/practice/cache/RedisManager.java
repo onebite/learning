@@ -40,19 +40,6 @@ public class RedisManager {
         log.info("init redis success.....");
     }
 
-
-    private <R> R callStript(Function<ScriptingCommands,R> function,R d){
-        try {
-            if(factory.isCluster()){
-                return function.apply(factory.getClusterConnection());
-            }else{
-                return function.apply(factory.getJedisConnection());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private <R> R call(Function<JedisCommands, R> function, R d) {
         if (factory.isCluster()) {
             try {
@@ -96,9 +83,40 @@ public class RedisManager {
         return old;
     }
 
+    public String eval(String script,List<String> keys,List<String> args){
+        Object ret = null;
+        if(factory.isCluster()){
+            JedisCluster clusterConnection = factory.getClusterConnection();
+            ret = clusterConnection.eval(script, keys, args);
+
+        }else{
+            Jedis jedisConnection = factory.getJedisConnection();
+            ret = jedisConnection.eval(script, keys, args);
+        }
+
+        if(ret == null){
+            return  null;
+        }
+
+        return ret.toString();
+    }
 
     public String eval(String script,int keycount,String... args){
-        call(jedis -> jedis.eval(script,));
+        Object ret = null;
+        if(factory.isCluster()){
+            JedisCluster clusterConnection = factory.getClusterConnection();
+            ret = clusterConnection.eval(script, keycount, args);
+
+        }else{
+            Jedis jedisConnection = factory.getJedisConnection();
+            ret = jedisConnection.eval(script, keycount, args);
+        }
+
+        if(ret == null){
+            return  null;
+        }
+
+        return ret.toString();
     }
 
     public long setnx(String key,String value){

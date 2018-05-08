@@ -2,6 +2,8 @@ package com.practice.lock;
 
 import com.practice.cache.RedisManager;
 
+import java.util.Collections;
+
 /**
  * @author lxl
  * @Date 2018/4/28 16:59
@@ -11,6 +13,7 @@ public class RedisLockUtil {
     private static final String LOCK_SUCCESS = "OK";
     private static final String SET_IF_NOT_EXIST = "NX";
     private static final String SET_WITH_EXPIRE_TIME = "PX";
+    private static final String RELEASE_SUCCESS = "1";
 
     public RedisLockUtil() {
     }
@@ -33,18 +36,21 @@ public class RedisLockUtil {
         return false;
     }
 
-
-    public static boolean releaseDistributedLock(String lokKey,String requestId){
+    /**
+     * 解锁
+     * @param lockKey
+     * @param requestId
+     * @return
+     */
+    public static boolean releaseDistributedLock(String lockKey,String requestId){
         String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+        String eval = RedisManager.I.eval(script, Collections.singletonList(lockKey), Collections.singletonList(requestId));
+        if(RELEASE_SUCCESS.equals(eval)){
+            return true;
+        }
 
+        return false;
     }
-
-
-
-
-
-
-
 
 
     /**
