@@ -4,7 +4,7 @@ import com.practice.thread.NamedThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -171,6 +171,46 @@ public class Utils {
         info.put("poolSize(workThread)", executor.getPoolSize());
         info.put("queueSize(blockedTask)", executor.getQueue().size());
         return info;
+    }
+
+    /**
+     * file to byte
+     * @param filePath
+     * @return
+     * @throws IOException
+     */
+    public static byte[] readFileByBytes(String filePath) throws IOException {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            throw new FileNotFoundException(filePath);
+        } else {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream((int)file.length());
+            BufferedInputStream in = null;
+
+            try {
+                in = new BufferedInputStream(new FileInputStream(file));
+                int bufSize = 1024;
+                byte[] buffer = new byte[bufSize];
+
+                int len;
+                while(-1 != (len = in.read(buffer, 0, bufSize))) {
+                    bos.write(buffer, 0, len);
+                }
+
+                byte[] var7 = bos.toByteArray();
+                return var7;
+            } finally {
+                try {
+                    if (in != null) {
+                        in.close();
+                    }
+                } catch (IOException var14) {
+                    var14.printStackTrace();
+                }
+
+                bos.close();
+            }
+        }
     }
 
 }

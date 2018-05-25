@@ -56,4 +56,25 @@ public interface CC {
             return ConfigBeanImpl.createInternal(cfg.getObject("config").toConfig(),clazz);
         }
     }
+
+    interface baidu{
+        Config cfg = CC.cfg.getObject("baidu").toConfig();
+        interface app{
+            Config cfg = baidu.cfg.getObject("app").toConfig();
+            String id = cfg.getString("id");
+            String key = cfg.getString("key");
+            String secret = cfg.getString("secret");
+
+            static String getId(){
+                return id;
+            }
+
+            static String getKey(){
+                return key;
+            }
+            static String getSecret(){
+                return secret;
+            }
+        }
+    }
 }
