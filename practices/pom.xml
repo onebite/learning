@@ -245,21 +245,6 @@
             <name>Maven China Mirror</name>
             <url>http://maven.net.cn/content/groups/public/</url>
         </repository>
-        <repository>
-            <id>snapshots</id>
-            <name>core Snapshots Repository</name>
-            <url>http://192.168.5.172:8081/nexus/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
-            <id>releases</id>
-            <name>Releases Repository</name>
-            <url>http://192.168.5.172:8081/nexus/content/repositories/releases/</url>
-        </repository>
-        <repository>
-            <id>thirdparty</id>
-            <name>Thirdparty/ Repository</name>
-            <url>http://192.168.5.172:8081/nexus/content/repositories/thirdparty/</url>
-        </repository>
     </repositories>
 
 </project>
