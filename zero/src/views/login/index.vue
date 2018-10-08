@@ -1,81 +1,117 @@
 <template>
-    <div class="login-view">
-        <div class="layer bg" id="login"/>
-        <div class="layer flex-center">
-            <div class="form-group">
-                <el-card>
-                    <el-form ref="loginForm" label-position="top" :rules="rules" :model="formLogin">
-                        <el-form-item prop="username">
-                            <el-input type="text" v-model="formLogin.username" placeholder="用户名">
-                                <i slot="prepend" class="fa fa-user-circle-o"></i>
-                            </el-input>
-                        </el-form-item>
-                        <el-form-item prop="password">
-                            <el-input type="text" v-model="formLogin.password" placeholder="用户名">
-                                <i slot="prepend" class="fa fa-user-circle-o"></i>
-                            </el-input>
-                        </el-form-item>
-                        <el-button @click="submit" type="primary" class="button-login">登录</el-button>
-                    </el-form>
-                </el-card>
-            </div>
-            <el-dialog title="快速选择用户" :visible.sync="dialogVisible" width="400px">
-                <el-row :gutter="10" style="margin: -20px 0px -10px 0px;">
-                    <el-col v-for="(user,index) in users" :key="index" :span="8">
-                        <div class="user-btn" @click="handleUserBtnClick(user)">
-                            <d2-icon name="user-circle-o"/>
-                            <span>{{user.name}}</span>
-                        </div>
-                    </el-col>
-                </el-row>
-            </el-dialog>
-        </div>
-    </div>
+  <div class="login-container">
+
+    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
+
+      <div class="title-container">
+        <h3 class="title">{{ $t('login.title') }}</h3>
+        <lang-select class="set-language"/>
+      </div>
+
+      <el-form-item prop="username">
+        <span class="svg-container">
+          <svg-icon icon-class="user" />
+        </span>
+        <el-input
+          v-model="loginForm.username"
+          :placeholder="$t('login.username')"
+          name="username"
+          type="text"
+          auto-complete="on"
+        />
+      </el-form-item>
+
+      <el-form-item prop="password">
+        <span class="svg-container">
+          <svg-icon icon-class="password" />
+        </span>
+        <el-input
+          :type="passwordType"
+          v-model="loginForm.password"
+          :placeholder="$t('login.password')"
+          name="password"
+          auto-complete="on"
+          @keyup.enter.native="handleLogin" />
+        <span class="show-pwd" @click="showPwd">
+          <svg-icon icon-class="eye" />
+        </span>
+      </el-form-item>
+
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
+
+    </el-form>
+
+  </div>
 </template>
 
 <script>
-import {mapActions} from 'vuex'
+import LangSelect from '@/components/LangSelect'
+
 export default {
-    data () {
-        return {
-            dialogVisible: false,
-            users: [
-                {
-            name: '管理员',
-            username: 'admin',
-            password: 'admin'
-            },
-            {
-            name: '编辑',
-            username: 'editor',
-            password: 'editor'
-            },
-            {
-            name: '用户1',
-            username: 'user1',
-            password: 'user1'
+    name: 'Login',
+    components: {LangSelect},
+
+    data() {
+        const validatePassword = (rule,value,callback) => {
+            if (value.length < 6){
+                callback(new Error('The password can not be less than 6 digits'))
+            } else {
+                callback()
             }
-        ],
-        // 表单
-        formLogin: {
-            username: 'admin',
-            password: 'admin',
-            code: 'v9am'
+        }
+
+        return {
+            loginRules: {
+                password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+            },
+            passwordType: 'password',
+            loading: false,
+            showDialog: false,
+            redirect: undefined
+        }
+    },
+
+    watch: {
+        $route: {
+        handler: function(route) {
+            this.redirect = route.query && route.query.redirect
         },
-        // 校验
-        rules: {
-            username: [
-            { required: true, message: '请输入用户名', trigger: 'blur' }
-            ],
-            password: [
-            { required: true, message: '请输入密码', trigger: 'blur' }
-            ],
-            code: [
-            { required: true, message: '请输入验证码', trigger: 'blur' }
-            ]
+        immediate: true
+        }
+
+    },
+    created() {
+        // window.addEventListener('hashchange', this.afterQRScan)
+    },
+    destroyed() {
+        // window.removeEventListener('hashchange', this.afterQRScan)
+    },
+
+    methods: {
+        showPwd() {
+            if (this.passwordType === 'password'){
+                this.passwordType = ''
+            } else {
+                this.passwordType = 'password'
+            }
+        },
+
+        handleLogin() {
+            this.$refs.loginForm.validate(valid => {
+                if (valid) {
+                    this.loading = true
+                    this.$store.dispatch('LoginByUserName',this.loginForm).then(() => {
+                        this.loading = false
+                        this.$router.push({path: this.redirect || '/'})
+                    }).catch(() => {
+                        this.loading = false
+                    })
+                } else {
+                    console.log("error submitt!!")
+                    return false
+                }
+            })
         }
     }
-        }
-        
 }
 </script>
