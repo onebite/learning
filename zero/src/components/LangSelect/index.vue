@@ -5,8 +5,8 @@
         </div>
 
         <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item :disabled="language==='zh'">中文</el-dropdown-item>
-            <el-dropdown-item :disabled="language==='en'">英语</el-dropdown-item>
+            <el-dropdown-item :disabled="language==='zh'" command="zh">中文</el-dropdown-item>
+            <el-dropdown-item :disabled="language==='en'" command="en">英语</el-dropdown-item>
         </el-dropdown-menu>
     </el-dropdown>
 </template>
@@ -20,6 +20,7 @@ export default {
     },
     methods: {
         handleSetLanguage(lang) {
+            console.info("i18n.locale changed {} => {}",this.$i18n.locale,lang)
             this.$i18n.locale = lang
             this.$store.dispatch("setLanguage",lang)
             this.$message({

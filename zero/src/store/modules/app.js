@@ -30,6 +30,7 @@ const app = {
             state.device = device
         },
         SET_LANGUAGE: (state,language) => {
+            console.info("state.lanuage changed {}=>{}",state.language,language)
             state.language = language
             Cookies.set('language',language)
         },

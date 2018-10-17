@@ -10,6 +10,7 @@ Vue.use(VueI18n)
 
 const messages = {
   en: {
+      // ES6扩展运算符合并对象
     ...enLocale,
     ...elementEnLocale
   },

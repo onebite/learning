@@ -4,17 +4,17 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">{{ $t('login.title') }}</h3>
-        <lang-select class="set-language"/>
+        <h3 class="title">{{ $t('route.login.title') }}</h3>
+        <langSelect class="set-language"/>
       </div>
 
       <el-form-item prop="username">
         <span class="svg-container">
-          <svg-icon icon-class="phonee" />
+          <svg-icon icon-class="user" />
         </span>
         <el-input
           v-model="loginForm.username"
-          :placeholder="$t('login.username')"
+          :placeholder="$t('route.login.username')"
           name="username"
           type="text"
           auto-complete="on"
@@ -28,7 +28,7 @@
         <el-input
           :type="passwordType"
           v-model="loginForm.password"
-          :placeholder="$t('login.password')"
+          :placeholder="$t('route.login.password')"
           name="password"
           auto-complete="on"
           @keyup.enter.native="handleLogin" />
@@ -37,7 +37,7 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">{{ $t('route.login.logIn') }}</el-button>
 
     </el-form>
 
@@ -49,7 +49,7 @@ import LangSelect from '@/components/LangSelect'
 
 export default {
     name: 'Login',
-    components: {LangSelect},
+    components: { LangSelect },
 
     data() {
         const validatePassword = (rule,value,callback) => {
@@ -111,7 +111,7 @@ export default {
                         this.loading = false
                     })
                 } else {
-                    console.log("error submitt!!")
+                    console.log('error submitt!!')
                     return false
                 }
             })
@@ -138,7 +138,7 @@ $cursor: #fff;
 .login-container {
     .el-input {
         display: inline-block;
-        height: 47;
+        height: 47px;
         width: 85%;
         input {
             background: transparent;
@@ -147,6 +147,7 @@ $cursor: #fff;
             border-radius: 0px;
             padding: 12px 5px 12px 15px;
             color: $light_gray;
+            height: 47px;
             caret-color: $cursor;
             &:-webkit-autofill {
                 -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
