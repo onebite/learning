@@ -341,7 +341,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../newsource/lizikj-resource" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../EasyTransaction/pom.xml" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -610,12 +610,12 @@
       <workItem from="1536130905699" duration="46000" />
       <workItem from="1536130986639" duration="625000" />
       <workItem from="1536215374323" duration="2682000" />
-      <workItem from="1540023396036" duration="3010000" />
+      <workItem from="1540023396036" duration="3748000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="140215000" />
+    <option name="totallyTimeSpent" value="140953000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
