@@ -4,6 +4,8 @@ import HelloWorld from '@/components/HelloWorld'
 
 Vue.use(Router)
 
+import Layout from '@/views/layout/Layout'
+
 export default new Router({
   routes: [
     {
