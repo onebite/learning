@@ -57,6 +57,23 @@ public class KeyUtils {
     }
 
     /**
+     * bytes to int
+     * @param buf
+     * @return
+     */
+    public static int parseInt(byte[] buf){
+        int x = 0;
+        x = x | (buf[0] & 0xFF);
+        x <<= 8;
+        x = x | (buf[1] & 0xFF);
+        x <<= 8;
+        x = x | (buf[2] & 0xFF);
+        x <<= 8;
+        x = x | (buf[3] & 0xFF);
+        return x;
+    }
+
+    /**
      * 获取随机字符串
      * @param length
      * @param charset

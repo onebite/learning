@@ -21,3 +21,17 @@ export default new Router({
     }
   ]
 })
+
+export const constantRouterMap = [
+  {
+    path: '/redirect',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: '/redirect/:path*',
+        component
+      }
+    ]
+  }
+]
